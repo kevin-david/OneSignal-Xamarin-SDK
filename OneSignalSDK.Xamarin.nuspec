@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
-        <version>4.3.0</version>
-        <id>OneSignalSDK.Xamarin</id>
+        <version>4.3.1</version>
+        <id>OneSignalSDK.Xamarin.kevin-david</id>
         <title>OneSignal SDK for Xamarin</title>
-        <authors>OneSignal</authors>
-        <owners>OneSignal</owners>
-        <licenseUrl>https://github.com/OneSignal/OneSignal-Xamarin-SDK/blob/master/LICENSE</licenseUrl>
-        <projectUrl>https://github.com/OneSignal/OneSignal-Xamarin-SDK</projectUrl>
+        <authors>kevin-david</authors>
+        <owners>kevin-david</owners>
+        <licenseUrl>https://github.com/kevin-david/OneSignal-Xamarin-SDK/blob/main/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/kevin-david/OneSignal-Xamarin-SDK</projectUrl>
         <icon>nuget_icon.png</icon>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>OneSignal for Xamarin</description>

@@ -1,0 +1,62 @@
+name: "Build Nuget Package"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  BUILD_CONFIGURATION: ReleaseNupkg
+  MONO_VERSION: 6.12
+  IOS_FRAMEWORK_VERSION: "16.0"
+
+jobs:
+  Build-Nuget:
+    runs-on: macos-latest
+    steps:
+      - name: Fetch & checkout
+        uses: actions/checkout@v3
+
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.x
+
+      - name: Install NuGet
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: 6.x
+
+      - name: Set default Xamarin SDK versions
+        run: |
+          ls -l /Library/Frameworks/Mono.framework/Versions
+          ls -l /Library/Frameworks/Xamarin.iOS.framework/Versions
+          $VM_ASSETS/select-xamarin-sdk-v2.sh --mono=${{ env.MONO_VERSION }} --ios=${{ env.IOS_FRAMEWORK_VERSION }}
+
+      - name: Set default Xcode version
+        run: |
+          XCODE_ROOT=/Applications/Xcode_14.2.app
+          echo "MD_APPLE_SDK_ROOT=$XCODE_ROOT" >> $GITHUB_ENV
+          sudo xcode-select -s $XCODE_ROOT
+
+      - name: Restore NuGet packages
+        run: nuget restore OneSignal.sln
+
+      - name: Build
+        run: |
+          msbuild /m OneSignal.sln \
+          /p:Configuration=${{ env.BUILD_CONFIGURATION }}
+
+      - name: Create Nuget Package
+        run: |
+          nuget pack OneSignalSDK.Xamarin.nuspec \
+          -OutputDirectory ${{ runner.temp }}/${{ env.BUILD_CONFIGURATION }}
+
+      - name: Publish build drop
+        uses: actions/upload-artifact@v3
+        with:
+          path: "${{ runner.temp }}/${{ env.BUILD_CONFIGURATION }}"
